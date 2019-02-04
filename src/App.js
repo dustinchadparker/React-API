@@ -1,25 +1,47 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "isomorphic-fetch";
+import "es6-promise";
 
 class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      fetched: [
+        {
+          title: [],
+          description: [],
+          director: []
+        }
+      ]
+    };
+  }
+
+  // title, description, director
+  componentDidMount() {
+    fetch("https://ghibliapi.herokuapp.com/films")
+      .then(res => res.json())
+      .then(obj =>
+        this.setState({
+          fetched: {
+            title: JSON.stringify(obj, ["title"]),
+            description: JSON.stringify(obj, ["description"]),
+            director: JSON.stringify(obj, ["director"])
+          }
+        })
+      );
+  }
+
+  createCard() {}
+
   render() {
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        {console.log(this.state.fetched.title)}
+        {this.state.fetched.map(item => {
+          return <div>{item.title}</div>;
+        })}
       </div>
     );
   }
