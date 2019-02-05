@@ -8,6 +8,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      isLoaded: false,
       films: [
         {
           title: [],
@@ -40,15 +41,12 @@ class App extends Component {
       });
   }
 
-  postFilms() {
-    document.getElementsByClassName("btn-primary")[0].remove();
-    document.getElementsByClassName("btn-div")[0].remove();
-    
-    this.state.films.map(item => {
+  postFilms = () => {
+    return this.state.films.map(item => {
       console.log(item);
       return (
         <div
-          className="card text-white bg-secondary mb-3"
+          className="card text-white bg-secondary mb-1"
           style={{ maxWidth: "18rem" }}
         >
           <div className="card-header">{item.title}</div>
@@ -59,27 +57,38 @@ class App extends Component {
         </div>
       );
     });
-  }
+  };
+
+  logo = () => {
+    return (
+      <div className="btn-div">
+        <img
+          src="https://seeklogo.com/images/S/Studio_Ghibli-logo-78E2716B50-seeklogo.com.png"
+          alt="logo"
+          width="200"
+          height="100"
+        />
+      </div>
+    );
+  };
+
+  toggle = () => {
+    this.setState({ isLoaded: !this.state.isLoaded });
+  };
 
   render() {
+    let element;
+    if (this.state.isLoaded === true) {
+      element = this.postFilms();
+    } else {
+      element = this.logo();
+    }
     return (
       <React.Fragment>
-        <div className="btn-div">
-          <img
-            src="https://seeklogo.com/images/S/Studio_Ghibli-logo-78E2716B50-seeklogo.com.png"
-            alt="logo"
-            width="200"
-            height="100"
-          />
-        </div>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={this.postFilms.bind(this)}
-        >
-          {" "}
+        <button type="button" className="btn btn-primary" onClick={this.toggle}>
           Load Films
         </button>
+        {element}
       </React.Fragment>
     );
   }
