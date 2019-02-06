@@ -2,14 +2,23 @@ import React, { Component } from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "isomorphic-fetch";
 import "es6-promise";
+import LoadFilms from "./components/LoadFilms.jsx";
+// import LoadPeople from './components/LoadPeople';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isLoaded: false,
+      filmsIsLoaded: false,
       films: [
+        {
+          title: [],
+          description: [],
+          director: []
+        }
+      ],
+      people: [
         {
           title: [],
           description: [],
@@ -17,47 +26,7 @@ class App extends Component {
         }
       ]
     };
-    this.postFilms = this.postFilms.bind(this);
   }
-
-  // title, description, director
-  componentDidMount() {
-    fetch("https://ghibliapi.herokuapp.com/films")
-      .then(res => res.json())
-      .then(filmData => {
-        let filmList = filmData.map(film => {
-          // for each item in the filmList, return a single object
-          // with these three properties on it.
-          return {
-            title: film.title,
-            description: film.description,
-            director: film.director
-          };
-        });
-
-        this.setState({
-          films: filmList
-        });
-      });
-  }
-
-  postFilms = () => {
-    return this.state.films.map(item => {
-      console.log(item);
-      return (
-        <div
-          className="card text-white bg-secondary mb-1"
-          style={{ maxWidth: "18rem" }}
-        >
-          <div className="card-header">{item.title}</div>
-          <div className="card-body">
-            <h5 className="card-title">{item.director}</h5>
-            <p className="card-text">{item.description}</p>
-          </div>
-        </div>
-      );
-    });
-  };
 
   logo = () => {
     return (
@@ -72,20 +41,24 @@ class App extends Component {
     );
   };
 
-  toggle = () => {
-    this.setState({ isLoaded: !this.state.isLoaded });
+  toggleFilms = () => {
+    this.setState({ filmsIsLoaded: !this.state.filmsIsLoaded });
   };
 
   render() {
     let element;
-    if (this.state.isLoaded === true) {
-      element = this.postFilms();
+    if (this.state.filmsIsLoaded === true) {
+      element = <LoadFilms />;
     } else {
       element = this.logo();
     }
     return (
       <React.Fragment>
-        <button type="button" className="btn btn-primary" onClick={this.toggle}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={this.toggleFilms}
+        >
           Load Films
         </button>
         {element}
