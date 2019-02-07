@@ -115,7 +115,7 @@ class App extends Component {
               className="btn btn-primary"
               rel="noopener noreferrer"
             >
-              Take me to their page!
+              Take me to {item.name}'s page!
             </a>
           </div>
         </div>
